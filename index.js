@@ -63,8 +63,10 @@ const options = {
           }
         : {},
       getKey: (req, filename, metadata) => {
+        const { userId } = metadata;
         logger.info("Getting key", { filename, metadata });
-        return filename;
+        if (!userId) throw new Error("Must provide userId!");
+        return `covid19/user-${userId}`;
       },
       acl: "private"
     }
