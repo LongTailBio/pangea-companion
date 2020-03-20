@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const companion = require("@uppy/companion");
 const winston = require("winston");
+const request = require("superagent");
 const envalid = require("envalid");
 const { str, url, port } = envalid;
 
@@ -24,6 +25,7 @@ const env = envalid.cleanEnv(process.env, {
   PORT: port({ default: 3020 }),
   SESSION_SECRET: str({ desc: "Secure session secret" }),
   COMPANION_FILE_PATH: str(),
+  PANGEA_BASE_URL: url(),
   AWS_KEY: str(),
   AWS_SECRET: str(),
   AWS_REGION: str({ default: "us-east-1" }),
@@ -32,22 +34,51 @@ const env = envalid.cleanEnv(process.env, {
 });
 
 var app = express();
-app.use(cors());
 app.use(bodyParser.json());
 
+// Express Session
 const sess = {
   secret: env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {}
 };
-
 if (env.isProd) {
   app.set("trust proxy", 1); // trust first proxy
   sess.cookie.secure = true; // serve secure cookies
 }
-
 app.use(session(sess));
+
+// CORS
+const corsOptions = {
+  allowedHeaders: ["content-type", "X-Pangea-Token"],
+  exposedHeaders: ["X-Pangea-Token"]
+};
+app.options("*", cors({ ...corsOptions, methods: ["OPTIONS"] }));
+app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allowed-Headers",
+    "Authorization, Origin, Content-Type, Accept, X-Pangea-Token"
+  );
+  next();
+});
+
+// Pangea Auth
+app.use((req, res, next) => {
+  const pangeaToken = req.header("x-pangea-token");
+  console.log(Object.keys(req.headers));
+  request
+    .get(`${env.PANGEA_BASE_URL}/auth/users/me/`)
+    .set("Authorization", `Bearer ${pangeaToken}`)
+    .then(result => {
+      console.log(result);
+      res.status(403).send("too bad");
+    })
+    .catch(() =>
+      res.status(403).send({ success: false, message: "unauthorized" })
+    );
+});
 
 // Companion
 const options = {
