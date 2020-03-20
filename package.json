@@ -1,0 +1,21 @@
+{
+  "name": "pangea-companion",
+  "version": "0.1.0",
+  "description": "Uppy companion instance for Pangea uploads",
+  "main": "index.js",
+  "author": "Benjamin Chrobot",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@uppy/companion": "^1.10.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "envalid": "^6.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "winston": "^3.2.1"
+  }
+}
