@@ -3,47 +3,22 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const companion = require("@uppy/companion");
-const winston = require("winston");
 const request = require("superagent");
-const envalid = require("envalid");
-const { str, url, port } = envalid;
 
-const logger = winston.createLogger({
-  exitOnError: false,
-  transports: [
-    new winston.transports.Console({
-      level: "info",
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json()
-      )
-    })
-  ]
-});
-
-const env = envalid.cleanEnv(process.env, {
-  PORT: port({ default: 3020 }),
-  SESSION_SECRET: str({ desc: "Secure session secret" }),
-  COMPANION_FILE_PATH: str(),
-  PANGEA_BASE_URL: url(),
-  AWS_KEY: str(),
-  AWS_SECRET: str(),
-  AWS_REGION: str({ default: "us-east-1" }),
-  AWS_S3_ENDPOINT: url({ default: undefined }),
-  AWS_S3_BUCKET: str()
-});
+const config = require("./config");
+const logger = require("./logger");
 
 var app = express();
 app.use(bodyParser.json());
 
 // Express Session
 const sess = {
-  secret: env.SESSION_SECRET,
+  secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {}
 };
-if (env.isProd) {
+if (config.isProd) {
   app.set("trust proxy", 1); // trust first proxy
   sess.cookie.secure = true; // serve secure cookies
 }
@@ -69,7 +44,7 @@ app.use((req, res, next) => {
   const pangeaToken = req.header("x-pangea-token");
   console.log(Object.keys(req.headers));
   request
-    .get(`${env.PANGEA_BASE_URL}/auth/users/me/`)
+    .get(`${config.PANGEA_BASE_URL}/auth/users/me/`)
     .set("Authorization", `Bearer ${pangeaToken}`)
     .then(result => {
       console.log(result);
@@ -84,13 +59,13 @@ app.use((req, res, next) => {
 const options = {
   providerOptions: {
     s3: {
-      key: env.AWS_KEY,
-      secret: env.AWS_SECRET,
-      bucket: env.AWS_S3_BUCKET,
-      region: env.AWS_REGION,
-      awsClientOptions: env.AWS_S3_ENDPOINT
+      key: config.AWS_KEY,
+      secret: config.AWS_SECRET,
+      bucket: config.AWS_S3_BUCKET,
+      region: config.AWS_REGION,
+      awsClientOptions: config.AWS_S3_ENDPOINT
         ? {
-            endpoint: env.AWS_S3_ENDPOINT
+            endpoint: config.AWS_S3_ENDPOINT
           }
         : {},
       getKey: (req, filename, metadata) => {
@@ -103,15 +78,15 @@ const options = {
     }
   },
   server: {
-    host: `127.0.0.1:${env.PORT}`,
+    host: `127.0.0.1:${config.PORT}`,
     protocol: "http"
   },
-  filePath: env.COMPANION_FILE_PATH
+  filePath: config.COMPANION_FILE_PATH
 };
 
 app.use(companion.app(options));
 
-const server = app.listen(env.PORT, "127.0.0.1", () => {
+const server = app.listen(config.PORT, "127.0.0.1", () => {
   const host = server.address().address;
   const port = server.address().port;
   logger.info(`Pangea Companion listening at http://${host}:${port}`);
