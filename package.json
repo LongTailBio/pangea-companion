@@ -6,11 +6,20 @@
   "author": "Benjamin Chrobot",
   "license": "MIT",
   "private": true,
+  "homepage": "https://github.com/LongTailBio/pangea-companion",
+  "bugs": {
+    "url": "https://github.com/LongTailBio/pangea-companion/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LongTailBio/pangea-companion.git"
+  },
   "scripts": {
     "start": "node index.js",
     "test:lint": "eslint lib/**/*.js index.js",
     "commit": "git-cz",
-    "commit:retry": "git-cz --retry"
+    "commit:retry": "git-cz --retry",
+    "release": "standard-version"
   },
   "dependencies": {
     "@uppy/companion": "^1.10.0",
@@ -32,7 +41,8 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.9",
-    "prettier": "^2.0.2"
+    "prettier": "^2.0.2",
+    "standard-version": "^7.1.0"
   },
   "config": {
     "commitizen": {
