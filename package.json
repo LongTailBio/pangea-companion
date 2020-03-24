@@ -6,8 +6,20 @@
   "author": "Benjamin Chrobot",
   "license": "MIT",
   "private": true,
+  "homepage": "https://github.com/LongTailBio/pangea-companion",
+  "bugs": {
+    "url": "https://github.com/LongTailBio/pangea-companion/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LongTailBio/pangea-companion.git"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test:lint": "eslint lib/**/*.js index.js",
+    "commit": "git-cz",
+    "commit:retry": "git-cz --retry",
+    "release": "standard-version"
   },
   "dependencies": {
     "@uppy/companion": "^1.10.0",
@@ -18,5 +30,37 @@
     "express-session": "^1.17.0",
     "superagent": "^5.2.2",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "commitizen": "^4.0.3",
+    "commitlint-circle": "^1.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.9",
+    "prettier": "^2.0.2",
+    "standard-version": "^7.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "eslint --fix"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
   }
 }
