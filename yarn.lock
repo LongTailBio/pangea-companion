@@ -227,13 +227,12 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@uppy/companion@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@uppy/companion/-/companion-1.10.0.tgz#4d592b04d280b1c984abc25ee5861fb30f08c29f"
-  integrity sha512-u1tnGbBt87C2z7bJ3Q5v7nGWj2achZSIAOZy+ZiFQ5JuvX4rc8sP2yDNzRuzKvuQjYMMuup/s7VNLLbIvwY+nA==
+"@uppy/companion@^1.13.2":
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/@uppy/companion/-/companion-1.13.2.tgz#5cfc2938fa62a42ad79947c4ec6a83b62219fbda"
+  integrity sha512-qkK4sHQbbiGfARTiKXXvb2e3/b1+w97Ui3BXRHVA+87JyX4xDEzzcuU6mcAAK8L9iIDIelhFM67m4JEwxtRg8w==
   dependencies:
     "@purest/providers" "1.0.1"
-    "@uppy/fs-tail-stream" "1.2.0"
     atob "2.1.2"
     aws-sdk "2.587.0"
     body-parser "1.19.0"
@@ -267,13 +266,6 @@
     uuid "3.3.3"
     validator "^12.1.0"
     ws "6.2.1"
-
-"@uppy/fs-tail-stream@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@uppy/fs-tail-stream/-/fs-tail-stream-1.2.0.tgz#bfd149c208d11e54ada1911c18a3f38abd0aa985"
-  integrity sha512-Yil6Z4phfYBHneLK5aimQ4AtVleorcTRuy0TzJrhFx4OEdbGUQ8haLQklQUOhaFJbaeu20VGishz/kLWzQiiTg==
-  dependencies:
-    once "^1.4.0"
 
 JSONStream@^1.0.4:
   version "1.3.5"
